@@ -37,35 +37,32 @@ Input:
 Output:
 """)
 
-user_prompt = ""
+travel_prompt = PromptTemplate.from_template("""
+        You are a helpful travel assistant. Use the following information to craft a personalized travel plan.
 
-travel_prompt = f"""
-You are a helpful travel assistant. Use the following information to craft a personalized travel plan.
+        === USER REQUEST ===
+        {user_prompt}
 
-=== USER REQUEST ===
-{user_prompt}
-
-Respond with a daily itinerary and actionable recommendations based on the user’s interests.
-"""
+        Respond with a daily itinerary and actionable recommendations based on the user’s interests.
+        """)
 
 
-# Use OpenAI LLM via langchain-openai
+
 llm = ChatOpenAI(
     model="gpt-3.5-turbo",
     temperature=1,
     api_key=openai_key
 )
 
-# New chain format (pipe style)
 search_query_chain = prompt_template | llm
-search_query_chain_travel = prompt_template | llm
+search_query_chain_travel = travel_prompt | llm
 
 def generate_search_query_from_prompt(prompt: str) -> str:
     response = search_query_chain.invoke({"user_prompt": prompt})
     return response.content.strip()
 
-def generate_travel_plan(prompt: str) -> str:
-    response = search_query_chain.invoke({"user_prompt": prompt})
+def generate_travel_plan(user_prompt: str) -> str:
+    response = search_query_chain_travel .invoke({"user_prompt": user_prompt})
     return response.content.strip()
 
 # Google Search function

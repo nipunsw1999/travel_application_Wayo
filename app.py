@@ -2,7 +2,7 @@
 
 import streamlit as st
 import pycountry
-from functions import generate_search_query_from_prompt,getInformationCSV
+from functions import generate_search_query_from_prompt,getInformationCSV,generate_travel_plan
 
 st.set_page_config(page_title="🌍 Travel Assistant", layout="centered")
 
@@ -58,4 +58,6 @@ if start:
         sub_prompt = generate_search_query_from_prompt(prompt)
         st.write()
         getInformationCSV(sub_prompt)
+        plan = generate_travel_plan(prompt)
         st.write(prompt)
+        st.write(plan)
