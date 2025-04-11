@@ -1,3 +1,4 @@
+![DALLE2025-04-1116 39 43-AmodernandcreativelogoforanAI-poweredtravelrecommendationapp ThedesignfeaturesasleekminimalisticAIrobotwithafriendlyappearance-ezgif com-webp-to-png-converter-removebg-preview](https://github.com/user-attachments/assets/ea861c04-9a67-4b5e-ab6a-3110836efa12)
 # Wayo – Travel Recommendation using AI
 
 **Way + Go = Wayo**  
