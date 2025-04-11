@@ -76,5 +76,9 @@ H2O Wave Version (Production)
 ```
 Access H2O Wave App: http://localhost:10101
 
+# Demo Video
+```bash
+Link: https://drive.google.com/file/d/1Tu1gJlYGMI0lLHhnjwNU1U_Io5YoLI5L/view?usp=sharing
+```
 
 
