@@ -1,9 +1,9 @@
-# 🌍 Wayo – Travel Recommendation using AI
+# Wayo – Travel Recommendation using AI
 
 **Way + Go = Wayo**  
 An AI-powered assistant for planning your next travel adventure.
 
-> 🚀 Powered by [H2O Wave](https://h2o.ai/products/h2o-wave/)
+> Powered by [H2O Wave](https://h2o.ai/products/h2o-wave/)
 
 ---
 
