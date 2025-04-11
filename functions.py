@@ -4,6 +4,7 @@ import httpx
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import PromptTemplate
+import base64
 
 load_dotenv()
 
@@ -103,10 +104,49 @@ def generate_travel_plan(user_prompt: str) -> str:
 # Meal plan generator
 def generate_meal_plan(user_prompt: str) -> str:
     """Meal plan generator"""
-    response = search_query_chain_meal .invoke({"user_prompt": user_prompt})
+    response = search_query_chain_meal .invoke({"user_prompt": f"{user_prompt}, Return like markdown format"})
     return response.content.strip()
 
 
+
+def encode_image_to_base64(path: str) -> str:
+    with open(path, "rb") as image_file:
+        return base64.b64encode(image_file.read()).decode()
+
+def meal(member_count, selected_country, trip_days, meal_preferences):
+    return f"""
+        We are a group of {member_count} people planning to visit **{selected_country}** for **{trip_days} days**.
+        We are especially interested in exploring food and dining options during our stay.
+
+        Our meal preferences are: **{", ".join(meal_preferences)}**.
+
+        Please recommend a detailed **day-by-day meal guide** or food experience for our trip, including:
+        - Must-try local dishes
+        - Breakfast, lunch, and dinner suggestions (if possible)
+        - Restaurants, cafes, or street food places that match our preferences
+        - Any special food experiences (e.g., cooking classes, local markets)
+        - Regional specialties or seasonal food options
+        - Tips for eating safely and affordably in **{selected_country}**
+
+        Tailor the plan to our **group size**, **preferences**, and the **number of days** we’ll be staying.
+        """
+
+def prompt(member_count, selected_countries, trip_days, budget, accommodation, travel_styles, meal_preferences):
+    return f"""
+We are a group of {member_count} people planning to visit **{selected_countries}** for **{trip_days} days**.
+Our budget per person is **{budget}**. We prefer **{accommodation.lower()}** and enjoy experiences like **{", ".join(travel_styles)}**.
+Our meal preferences are: **{", ".join(meal_preferences)}**.
+
+Please create a detailed **travel itinerary** that includes:
+
+- Popular tourist attractions  
+- Cultural experiences  
+- Local food & drink spots  
+- Relaxing activities  
+- A balance of sightseeing and free time  
+
+Also include **travel tips and suggestions** tailored to our group size, preferences, and the time of year.
+"""
 
 
 
@@ -114,13 +154,14 @@ def generate_meal_plan(user_prompt: str) -> str:
 
 
 # Google Search function
-def google_search(query, max_results=5):
+def google_search(query, max_results=10): 
     url = "https://www.googleapis.com/customsearch/v1"
     params = {
         "key": google_api_key,
         "cx": search_engine_id,
         "q": query,
-        "start": 1
+        "start": 1,
+        "num": max_results
     }
 
     response = httpx.get(url, params=params)
@@ -153,6 +194,7 @@ def google_search(query, max_results=5):
         })
 
     return results
+
 
 
 # Write CSV file
