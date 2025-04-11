@@ -71,7 +71,7 @@ Access Streamlit App: http://localhost:8501
 
 H2O Wave Version (Production)
 ```bash
-wave run wave_app.py
+(venv) wave run wave_app.py
 ```
 Access H2O Wave App: http://localhost:10101
 
