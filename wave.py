@@ -10,7 +10,7 @@ travel_styles = [
     "Budget", "Food & Drink", "Nightlife", "Wellness & Spa", "Shopping"
 ]
 
-base64_image = encode_image_to_base64("logo.png")
+base64_image = encode_image_to_base64("static/logo.png")
 image_data_uri = f"data:image/jpeg;base64,{base64_image}"
 
 @app('/')
