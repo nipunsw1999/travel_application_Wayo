@@ -1,13 +1,11 @@
-# app.py
-
 import streamlit as st
 import pycountry
 from functions import generate_search_query_from_prompt,getInformationCSV,generate_travel_plan,generate_meal_plan
 import pandas as pd
 
-st.set_page_config(page_title="🌍 Travel Assistant", layout="centered")
+st.set_page_config(page_title="🌍 Wayo Assistant", layout="centered")
 
-st.title("✈️ Travel Recommendation Assistant")
+st.title("✈️ Wayo Travel Recommendation")
 st.markdown("Ask travel questions like destinations, budget trips, or visa-free countries!")
 
 country_list = sorted([country.name for country in pycountry.countries])
@@ -82,12 +80,18 @@ if start:
     with st.spinner("Generating..."):
         sub_prompt = generate_search_query_from_prompt(prompt)
         getInformationCSV(sub_prompt)
+        
         plan = generate_travel_plan(prompt)
+    
         st.title("Plan")
         st.write(plan)
+        
         meal_plan = generate_meal_plan(meal_prompt)
+        
         st.title("Meal plan")
         st.write(meal_plan)
+        
+        # CSV file google search api
         df = pd.read_csv("Data Source/travel_search_results.csv")
         image_column = df.columns[-1]
         for index, row in df.iterrows():
@@ -95,18 +99,16 @@ if start:
             link = row["Link"]
             image_url = row[image_column]
 
-            # Show title as clickable link
             st.markdown(f"### [{title}]({link})")
 
-            # Show image only if it's valid
             if (
                 pd.notna(image_url) and
-                image_url != "" and
+                image_url.startswith(('http://', 'https://', '//')) and
                 not image_url.startswith("x-raw-image://")
             ):
+                if image_url.startswith('//'):
+                    image_url = 'https:' + image_url
                 st.image(image_url, width=500)
 
+
             st.markdown("---")
-            
-        
-        

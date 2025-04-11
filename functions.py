@@ -4,18 +4,15 @@ import httpx
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import PromptTemplate
-from langchain_core.runnables import RunnableSequence
 
-
-# Load environment variables
 load_dotenv()
 
-# Get API credentials
 openai_key = os.getenv("OPENAI_API_KEY")
 google_api_key = os.getenv("GOOGLE_API_KEY")
 search_engine_id = os.getenv("GOOGLE_SEARCH_ENGINE_ID")
 
-# Define the prompt
+
+# CSV help prompt
 prompt_template = PromptTemplate.from_template("""
 You are a helpful assistant that converts user travel prompts into short Google search queries.
 
@@ -37,6 +34,7 @@ Input:
 Output:
 """)
 
+# Travel plan prompt
 travel_prompt = PromptTemplate.from_template("""
         You are a helpful travel assistant. Use the following information to craft a personalized travel plan.
 
@@ -46,6 +44,7 @@ travel_prompt = PromptTemplate.from_template("""
         Respond with a daily itinerary and actionable recommendations based on the user’s interests.
         """)
 
+# Meal plan prompt
 meal_prompt = PromptTemplate.from_template("""
 You are a helpful travel assistant. Use the following information to craft a personalized **day-by-day meal and food experience plan**.
 
@@ -79,21 +78,40 @@ llm = ChatOpenAI(
     api_key=openai_key
 )
 
+
 search_query_chain = prompt_template | llm
 search_query_chain_travel = travel_prompt | llm
 search_query_chain_meal = travel_prompt | llm
 
+
+
+
+
+
+# CSV Help function
 def generate_search_query_from_prompt(prompt: str) -> str:
+    """CSV Help function"""
     response = search_query_chain.invoke({"user_prompt": prompt})
     return response.content.strip()
 
+# Travel plan generator
 def generate_travel_plan(user_prompt: str) -> str:
+    """Travel plan generator"""
     response = search_query_chain_travel .invoke({"user_prompt": user_prompt})
     return response.content.strip()
 
+# Meal plan generator
 def generate_meal_plan(user_prompt: str) -> str:
+    """Meal plan generator"""
     response = search_query_chain_meal .invoke({"user_prompt": user_prompt})
     return response.content.strip()
+
+
+
+
+
+
+
 
 # Google Search function
 def google_search(query, max_results=5):
@@ -118,7 +136,6 @@ def google_search(query, max_results=5):
         pagemap = item.get("pagemap", {})
         metatags = pagemap.get("metatags", [])
 
-        # Try cse_image first
         if "cse_image" in pagemap:
             cse_images = pagemap.get("cse_image", [])
             if isinstance(cse_images, list) and cse_images:
@@ -137,8 +154,8 @@ def google_search(query, max_results=5):
 
     return results
 
-# === Example Usage ===
 
+# Write CSV file
 def getInformationCSV(user_prompt):
     query = generate_search_query_from_prompt(user_prompt)
     results = google_search(query)
@@ -149,5 +166,3 @@ def getInformationCSV(user_prompt):
     df = pd.DataFrame(results)
     df.to_csv("Data Source/travel_search_results.csv", index=False)
     print("✅ Results saved to 'travel_search_results.csv'")
-
-    
