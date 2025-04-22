@@ -57,10 +57,9 @@ venv\Scripts\activate
 ```
 ## 5. Setup .env file
 ```bash
-OPENAI_API_KEY=your_openai_key
+H2OGPTE_API_TOKEN=your_h2ogpte_api_token
 GOOGLE_API_KEY=your_google_api_key
 GOOGLE_SEARCH_ENGINE_ID=your_google_search_engine_id
-GEMINI_API_KEY=your_gemini_api_key
 ```
 
 ## 6. Run the Application Locally
