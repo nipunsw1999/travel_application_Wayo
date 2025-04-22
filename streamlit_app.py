@@ -1,6 +1,6 @@
 import streamlit as st
 import pycountry
-from functions import generate_search_query_from_prompt,getInformationCSV,generate_travel_plan,generate_meal_plan
+from functions import chatWithH2OGPTE_travel,prompt,chatWithH2OGPTE_meal,generate_search_query_from_prompt,getInformationCSV,generate_travel_plan,generate_meal_plan
 import pandas as pd
 
 st.set_page_config(page_title="🌍 Wayo Assistant", layout="centered")
@@ -81,12 +81,12 @@ if start:
         sub_prompt = generate_search_query_from_prompt(prompt)
         getInformationCSV(sub_prompt)
         
-        plan = generate_travel_plan(prompt)
+        plan = chatWithH2OGPTE_travel(prompt)
     
         st.title("Plan")
         st.write(plan)
         
-        meal_plan = generate_meal_plan(meal_prompt)
+        meal_plan = chatWithH2OGPTE_meal(meal_prompt)
         
         st.title("Meal plan")
         st.write(meal_plan)
