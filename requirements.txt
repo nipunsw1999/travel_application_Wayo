@@ -6,3 +6,4 @@ httpx
 pycountry
 langchain-community
 langchain-openai
+h2ogpte==1.6.27

@@ -1,6 +1,6 @@
 from h2o_wave import main, app, Q, ui
 import pycountry
-from functions import prompt, meal,generate_search_query_from_prompt, getInformationCSV, generate_travel_plan, generate_meal_plan,encode_image_to_base64
+from functions import chatWithH2OGPTE_travel,prompt,chatWithH2OGPTE_meal, meal,generate_search_query_from_prompt, getInformationCSV, generate_travel_plan, generate_meal_plan,encode_image_to_base64
 import pandas as pd
 
 choices = [ui.choice(name=country.name, label=country.name) for country in pycountry.countries]
@@ -197,8 +197,8 @@ async def serve(q: Q):
         sub_prompt = generate_search_query_from_prompt(travel_prompt)
         getInformationCSV(sub_prompt)
 
-        q.client.travel_plan = generate_travel_plan(travel_prompt)
-        q.client.meal_plan = generate_meal_plan(meal_prompt)
+        q.client.travel_plan = chatWithH2OGPTE_travel(travel_prompt)
+        q.client.meal_plan = chatWithH2OGPTE_meal(meal_prompt)
         q.client.hasResult = True
         del q.page['example1']
         

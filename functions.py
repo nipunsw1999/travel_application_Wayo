@@ -2,12 +2,13 @@ import os
 import pandas as pd
 import httpx
 from dotenv import load_dotenv
-from langchain_openai import ChatOpenAI
 from langchain_core.prompts import PromptTemplate
 import base64
+from h2ogpte import H2OGPTE
 
 load_dotenv()
 
+h2ogpte_api_token = os.getenv('H2OGPTE_API_TOKEN')
 openai_key = os.getenv("OPENAI_API_KEY")
 google_api_key = os.getenv("GOOGLE_API_KEY")
 search_engine_id = os.getenv("GOOGLE_SEARCH_ENGINE_ID")
@@ -45,6 +46,12 @@ travel_prompt = PromptTemplate.from_template("""
         Respond with a daily itinerary and actionable recommendations based on the user’s interests.
         """)
 
+travel_prompt_new = """
+        You are a helpful travel assistant. Use the following information to craft a personalized travel plan.
+        Respond with a daily itinerary and actionable recommendations based on the user’s interests.
+        """
+
+
 # Meal plan prompt
 meal_prompt = PromptTemplate.from_template("""
 You are a helpful travel assistant. Use the following information to craft a personalized **day-by-day meal and food experience plan**.
@@ -72,6 +79,30 @@ Repeat this format for each day of the trip.
 Respond with a **clear, day-wise meal itinerary** tailored to the user's preferences and travel destination.
 """)
 
+meal_prompt_new = """
+You are a helpful travel assistant. Use the following information to craft a personalized **day-by-day meal and food experience plan**.
+
+Please include for each day:
+- 🍽️ Specific dishes for **breakfast**, **lunch**, and **dinner**
+- 🏪 Restaurant, cafe, or street food suggestions (optional)
+- 🌿 Regional specialties and seasonal options (if relevant)
+- ✅ Tips based on dietary preferences (e.g., vegetarian, halal)
+- 🎉 Bonus experiences like food markets, cooking classes, or traditional meals
+
+Your format should be:
+
+Day 1 – [City or Region]
+- **Breakfast**: [Dish]
+- **Lunch**: [Dish]
+- **Dinner**: [Dish]
+- *Notes: [Optional food experience or local tip]*
+
+Repeat this format for each day of the trip.
+
+Respond with a **clear, day-wise meal itinerary** tailored to the user's preferences and travel destination.
+"""
+
+
 
 llm = ChatOpenAI(
     model="gpt-3.5-turbo",
@@ -86,7 +117,35 @@ search_query_chain_meal = travel_prompt | llm
 
 
 
+def chatWithH2OGPTE_travel(user):
+    client = H2OGPTE(
+    address='https://h2ogpte.genai.h2o.ai',
+    api_key=h2ogpte_api_token,
+    )
 
+    chat_session_id = client.create_chat_session()
+
+    answer = "answer"
+    
+    with client.connect(chat_session_id) as session:
+        reply = session.query(travel_prompt_new+f"User message: {user}")
+        answer = reply.content
+    return answer
+
+def chatWithH2OGPTE_meal(user):
+    client = H2OGPTE(
+    address='https://h2ogpte.genai.h2o.ai',
+    api_key=h2ogpte_api_token,
+    )
+
+    chat_session_id = client.create_chat_session()
+
+    answer = "answer"
+    
+    with client.connect(chat_session_id) as session:
+        reply = session.query(meal_prompt_new+f"User message: {user}")
+        answer = reply.content
+    return answer
 
 
 # CSV Help function
