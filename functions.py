@@ -2,6 +2,7 @@ import os
 import pandas as pd
 import httpx
 from dotenv import load_dotenv
+from langchain_openai import ChatOpenAI
 from langchain_core.prompts import PromptTemplate
 import base64
 from h2ogpte import H2OGPTE

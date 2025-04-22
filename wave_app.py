@@ -101,7 +101,7 @@ async def serve(q: Q):
     q.page['header'] = ui.header_card(
         box='header',
         title='Wayo',
-        subtitle='LLM powered by H2O Wave',
+        subtitle='LLM powered by h2oGPTe',
         image=image_data_uri,
         items=[ui.button(name='theme', label=q.client.themeNameText)]
         )
