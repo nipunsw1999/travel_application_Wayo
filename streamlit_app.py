@@ -81,12 +81,12 @@ if start:
         sub_prompt = generate_search_query_from_prompt(prompt)
         getInformationCSV(sub_prompt)
         
-        plan = chatWithH2OGPTE_travel(prompt)
+        plan = generate_travel_plan(prompt)
     
         st.title("Plan")
         st.write(plan)
         
-        meal_plan = chatWithH2OGPTE_meal(meal_prompt)
+        meal_plan = generate_meal_plan(meal_prompt)
         
         st.title("Meal plan")
         st.write(meal_plan)
